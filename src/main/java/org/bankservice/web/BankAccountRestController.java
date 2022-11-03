@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -36,6 +37,7 @@ public class BankAccountRestController {
 
     @PostMapping("/accounts")
     BankAccount save(@RequestBody BankAccount bankAccount){
+        bankAccount.setId(UUID.randomUUID().toString());
         return bankAccountRepository.save(bankAccount);
     }
 
