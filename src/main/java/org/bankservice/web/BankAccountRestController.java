@@ -1,16 +1,16 @@
 package org.bankservice.web;
 
 
+import org.bankservice.dto.BankAccountRequestDTO;
+import org.bankservice.dto.BankAccountResponseDTO;
 import org.bankservice.entities.BankAccount;
 import org.bankservice.repository.BankAccountRepository;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.dao.DataAccessResourceFailureException;
+import org.bankservice.service.AccountService;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -18,9 +18,11 @@ import java.util.UUID;
 public class BankAccountRestController {
 
     private final BankAccountRepository bankAccountRepository;
+    private final AccountService accountService;
 
-    public BankAccountRestController(BankAccountRepository bankAccountRepository) {
+    public BankAccountRestController(BankAccountRepository bankAccountRepository, AccountService accountService) {
         this.bankAccountRepository = bankAccountRepository;
+        this.accountService = accountService;
     }
 
 
@@ -36,9 +38,8 @@ public class BankAccountRestController {
     }
 
     @PostMapping("/accounts")
-    BankAccount save(@RequestBody BankAccount bankAccount){
-        bankAccount.setId(UUID.randomUUID().toString());
-        return bankAccountRepository.save(bankAccount);
+    BankAccountResponseDTO save(@RequestBody BankAccountRequestDTO bankAccountRequestDTO){
+        return accountService.addAcount(bankAccountRequestDTO);
     }
 
     @PutMapping("/accounts/{id}")
